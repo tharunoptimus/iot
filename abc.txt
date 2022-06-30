@@ -1,0 +1,756 @@
+
+16 BIT ADDITION :
+
+MOV R0, #40
+MOV A, @R0
+INC R0
+ADD A, @R0
+MOV DPTR, #8500
+MOV @DPTR, A
+INC DPTR
+INC R0
+MOV A, @R0
+INC R0
+ADDC A, @R0
+MOV X @DPTR, A
+LCALL 00BB
+
+16 BIT SUBTRACTION :
+
+MOV R1, #00
+MOV R2, #00
+MOV R3, #50
+MOV A, R1
+MOV A, R1
+SUBB A, R2
+MOV R6, A
+MOV A, R3
+SUBB A, R4
+MOV R5, A
+LCALL 00BB
+
+16 BIT MULTIPLICATION :
+
+org 0000h
+MOV R0,#0ffH ;MSB1
+MOV R1,#0ffH ;MSB2
+MOV R2,#0ffH ;LSB1
+MOV R3,#0ffH  ;LSB2
+MOV A,R2
+MOV B,R3
+MUL AB
+MOV R4,A
+MOV R5,B
+MOV A,R3
+MOV B,R0
+MUL AB
+MOV R6,B
+ADDC A,R5
+MOV R5,A
+MOV A,R1
+MOV B,R2
+MUL AB
+ADDC A,R5
+MOV R5,A
+MOV A,B
+ADDC A,R6
+MOV R6,A
+MOV A,R0
+MOV B,R1
+MUL AB
+ADDC A,R6
+MOV R6,A
+MOV A,B
+ADDC A,#00H
+MOV R7,A
+END
+end
+
+Multibyte Addition :
+
+MOV R0,#40
+MOV R1,#50
+MOV R3,#04
+MOV A,@RO
+ADDC A,@RO1
+MOV @R1,A
+INC RO
+INC R1
+DJNZ R3,8506
+LCALL 00BB
+
+Multibyte subs :
+
+MOV RO,#40
+MOV R1,#50
+MOV R2,#4
+CIR C
+MOV A,@RO
+SUBB A,@R1
+MOV @R1,A
+INC RO
+INC R1
+DJNZ R2,8707
+LCALL 00BB
+
+Multybyte mul :
+
+MOV R2,#02
+MOV R0,#40
+MOV R5,#50
+MOV R1,#60
+CLRC 
+MOV R4,#00
+MOV A,@R0
+MOV F0,R5
+MUL AB
+ADDC A,R4
+MOV @R1,A
+MOV R4,F0
+INC R0
+INC R1
+DJNZ R2,885A
+MOV A,F0
+ADDC A,#00
+MOV @R1,A
+LCALL 00BB
+
+
+
+Assending:
+
+MOV R4,#05
+MOV R3,#05
+MOV R0,#40
+CLR C
+MOV A,@R0
+MOV R1,A
+INC R0
+MOV A,@R0
+SUBB A,R1
+JNC 8516
+MOV A,@R0
+DEC R0
+MOV @R0,A
+MOV  A,R1
+INC R0
+MOV @R0,A
+DJNZ R3,8507
+DJNZ  R4, 8502
+
+
+Descending :
+
+MOV R4,#05
+MOV R3,#05
+MOV R0,#40
+CLR C
+MOV A,@R0
+MOV R1,A
+INC R0
+MOV A,@R0
+SUBB A,R1
+JC 8516
+MOV A,@R0
+DEC R0
+MOV @R0,A
+MOV  A,R1
+INC R0
+MOV @R0,A
+DJNZ R3,8507
+DJNZ  R4, 8502
+
+BCD-HEX :
+
+MOV R0,#99H
+MOV A,R0
+ANL A,#0FH
+MOV R1,A
+MOV A,R0
+ANL A,#F0
+SWAP A
+MOV F0,#0AH
+MUL AB
+ADD A,R1
+LCALL 00BB
+
+HEX-BCD :
+
+MOV A,#5FH
+MOV F0,#64H
+DIV AB
+MOV R0,A
+MOV A,F0
+MOV F0,#0AH
+DIV AB
+SWAP A
+ADD A,F0
+MOV 40H,A
+MOV 41H,R0
+LCALL 00BB
+
+HEXADECIMAL-ASCII :
+
+MOV R0,#2A
+MOV A,R0
+CRL C
+SUBB A,#0A
+JC NUM
+ADD A,#37
+SJMP STORE
+MOV A,R2
+ADD A,#30H
+MOV R1,A
+LCALL 00BB
+
+
+BINARY-GRAY CODE :
+CLR C
+MOV A,#CC
+MOV R0,A
+RRC A
+XRL A,R0
+
+LCALL 00BB
+
+GRAY CODE-BINARY :
+
+mov a,#aa
+mov r1,a
+mov r2,#07
+clr c
+rrc a
+xrl a,r1
+djnz r2,9003
+mov r6,a
+lcall 00bb
+
+Addition on N :
+
+MOV R0,#4A
+MOV R1,#65
+MOV A,@R1
+MOV R2,A
+MOV A,#00
+ADDC A,@R0
+INC R0
+DJNZ R2,8308
+LCALL 00BB
+
+LED :
+AIM:
+To blink a LED using Node MCU
+HARDWARE REQUIRED:
+● NodeMCU x 1
+● LED x 1
+● BreadBoard
+● 200 ohm – 1K ohm resistor x 1
+● Micro USB cable x 1
+● PC x 1
+● Software Arduino IDE(version 1.6.4+)
+● Jumper Wires (Male – Female & Male – Male)
+CIRCUIT DIAGRAM:
+SOURCE CODE:
+int LED = 5; // Assign LED pin i.e: D1 on NodeMCU
+void setup() {
+// initialize GPIO 5 as an output
+pinMode(LED, OUTPUT);
+}
+// the loop function runs over and over again forever
+void loop() {
+digitalWrite(LED, HIGH); // turn the LED on
+delay(1000); // wait for a second
+digitalWrite(LED, LOW); // turn the LED off
+48
+delay(1000); // wait for a second
+}
+
+d1-anode
+gnd-cathode
+
+Infrared :
+
+HARDWARE REQUIRED:
+● NodeMCU
+● IR Sensor
+● Bread Board
+● Jumper Wires
+● Micro USB Cable
+● Arduino IDE
+● 200 ohm – 1K ohm resistor x 1
+● PC
+● LE
+
+SOURCE CODE:
+int ledPin = 12; // choose pin for the LED
+int inputPin = 13; // choose input pin (for Infrared sensor)
+int val = 0; // variable for reading the pin status
+void setup()
+{
+pinMode(ledPin, OUTPUT); // declare LED as output
+52
+pinMode(inputPin, INPUT); // declare Infrared sensor as input
+}
+void loop()
+{
+val = digitalRead(inputPin); // read input value
+if (val == HIGH)
+{ // check if the input is HIGH
+digitalWrite(ledPin, LOW); // turn LED OFF
+}
+else
+{
+digitalWrite(ledPin, HIGH); // turn LED ON
+}
+}
+
+
+one side
+
+Vcc - 3v
+Output pin - D7
+Gnd - gnd
+
+anode - d6
+other side
+cathode - gnd
+
+LDR
+
+Hardware Required
+
+NodeMCU
+LDR / photoresistor
+10k ohm resistor
+Breadboard
+Micro USB cable
+Connecting Wires
+
+SOURCE CODE:
+void setup() {
+Serial.begin(9600); // initialize serial communication at 9600 BPS
+}
+void loop() {
+int sensorValue = analogRead(A0); // read the input on analog pin 0
+float voltage = sensorValue * (5.0 / 1023.0); // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V)
+Serial.println(voltage); // print out the value you read
+54
+}
+
+same side :
+output pin - A0
+another - wire- 3v3
+resistor - wire - gnd
+
+proximity
+
+Hardware Requirements
+
+NodeMCU
+HC-SR04 (Ultra-sonic Sensor)
+Bread Board
+Jumper Wires
+Micro USB Cable
+
+Source Code :
+
+const int trigPin = 2;  //D4
+const int echoPin = 0;  //D3
+
+
+long duration;
+int distance;
+
+void setup() {
+pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+Serial.begin(9600); // Starts the serial communication
+}
+
+void loop() {
+
+// Clears the trigPin
+digitalWrite(trigPin, LOW);
+delayMicroseconds(2);
+
+// Sets the trigPin on HIGH state for 10 micro seconds
+digitalWrite(trigPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin, LOW);
+
+// Reads the echoPin, returns the sound wave travel time in microseconds
+duration = pulseIn(echoPin, HIGH);
+
+// Calculating the distance
+distance= d…
+
+Servo with pot :
+
+Hardware Required
+
+NodeMCU
+10K POT
+Servo Motor
+Bread Board
+Male Header pins
+Micro USB cable
+Connecting Wires
+
+# include<Servo.h>
+Servo mew 1;
+Setup ()
+New1.attach(D6);
+Serial.begin(9600);
+61
+pinMode(A0, INPUT);
+loop()
+float x=analogRead(A0);
+x=map(x,0,1023,0,180);
+new1.write (x);
+delay(15);}
+
+Servo connections:
+
+Orange - D4.
+
+Brown - Gnd.
+
+red - 3v3.
+
+Pot connections:
+
+first - 3v3.
+
+second - A0.
+
+third - GND .
+
+servo
+
+Source Code :
+
+#include <Servo.h>
+
+Servo servo;
+
+void setup() {
+
+servo.attach(2); //D4
+
+servo.write(0);
+
+delay(2000);
+
+}
+
+void loop() {
+
+servo.write(90);
+
+delay(1000);
+
+servo.write(0);
+
+delay(1000);
+
+}
+
+White - D4
+Black - GND 
+Red - 3V3 
+
+Orange - D4.
+Brown - GND 
+Red - 3V3
+
+temp
+
+HARDWARE REQUIRED:
+● NodeMCU
+● LM35 Temperature Sensor
+● Bread Board
+● Jumper Wires
+● Micro USB Cable
+● Arduino IDE
+● 200 ohm – 1K ohm resistor x 1
+● PC
+
+SOURCE CODE:
+int outputpin= A0;
+void setup() {
+Serial.begin(9600);
+50
+}
+void loop() //main loop
+{
+int analogValue = analogRead(outputpin);
+float millivolts = (analogValue/1024.0) * 3300; //3300 is the voltage provided by NodeMCU
+float celsius = millivolts/10;
+Serial.print("in DegreeC= ");
+Serial.println(celsius);
+float fahrenheit = ((celsius * 9)/5 + 32);
+Serial.print(" in Farenheit= ");
+Serial.println(fahrenheit);
+delay(1000);
+}
+
+one side
+Vout - A0
++Vcc - 3v3
+gnd - gnd
+
+1) Timer Delay program with no interrupts using Assembly Language Programming :
+AIM :
+To write an Assembly Language program to generate a time delay with no interrupts. ALGORITHM :
+1. Set the port 0 as an output pin
+2. Set the value of pin1 of port 0 as high
+3. Invoke the timer function to generate delay
+4. Set the value of pin1 of port 0 as low
+5. Invoke the timer function to generate delay
+6. Repeat steps 2-5 infinitely
+7. In the timer function, set the value of TMOD to use Mode 1 of Timer 0
+8. Set the initial value for the timer in TH0 and TL0
+9. Start the timer by setting TR0 to 1
+10. Watch for rollover by checking TF0
+11. If TF0 becomes 1, stop timer by setting TR0 to 0 and reset flag TF0
+SOURCE CODE :
+org 0h
+mov p0, #00h
+test:
+setb p0.1
+call timer
+clr p0.1
+call timer
+jmp test
+timer:
+mov tmod, #01h
+mov th0, #04h
+mov tl0, #04h
+setb tr0
+jnb tr0
+jnb tf0, $
+clr tf0
+ret
+End
+
+2) Timer Delay program with interrupts using Assembly Language Programming :
+AIM :
+To write an Assembly Language program to generate a time delay with interrupts. ALGORITHM :
+1. Set the port 0 as an output pin
+2. Set the value of pin1 of port 0 as high
+3. Invoke the timer function to generate delay
+4. Set the value of pin1 of port 0 as low
+5. Invoke the timer function to generate delay
+6. Repeat steps 2-5 infinitely
+7. In the timer function, set the value of TMOD to use Mode 1 of Timer 0
+8. Set the initial value for the timer in TH0 and TL0
+9. Start the timer by setting TR0 to 1
+10. Watch for rollover by checking TF0
+11. If TF0 becomes 1, stop timer by setting TR0 to 0 and reset flag TF0
+SOURCE CODE :
+org 0h
+test:
+mov p1, #00h
+call inter
+timer:
+mov tmod, #01h
+mov th0, #04h
+mov tl0, #04h
+setb tr0
+jnb tf0, $
+clr tf0
+ret
+inter:
+jnb ie.0, $
+setb p1.0
+call timer
+clr p1.0
+jmp inter
+end
+
+1) Serial Transmission program using Assembly Language Programming :
+AIM:
+To write an assembly language program to perform serial transmission of data. ALGORITHM:
+1. Set the value of TMOD to use Mode 2 of Timer 1
+2. Set the Baud Rate in TH1
+3. Set the value in SCON for serial operation mode
+4. Start the timer by setting TR1 to 1
+5. Write the value to be transmitted into SBUF
+6. Watch for end of transmission using TI
+7. If TI becomes 1, reset transmission interrupt TI to 0
+8. Repeat steps 5-7 infinitely
+SOURCE CODE :
+org 0h
+mov scon, #50h
+mov tmod, #20h
+mov th1, #-3
+setb tr1
+repeat:
+mov sbuf, #"Y" acall tran
+mov sbuf, #"E" acall tran
+mov sbuf, #"S" acall tran
+sjmp repeat
+tran:
+jnb ti, $
+clr ti
+ret
+end
+
+2) Serial Receive program using Assembly Language Programming :
+AIM:
+To write an assembly language program to perform serial reception of data. ALGORITHM:
+1. Set the value of TMOD to use Mode 2 of Timer 1
+2. Set the Baud Rate in TH1
+3. Set the value in SCON for serial operation mode
+4. Start the timer by setting TR1 to 1
+5. Watch for reception of serial data using RI
+6. If RI becomes 1, read value from SBUF
+7. Write the value received to port 0
+8. Reset RI to 0
+9. Repeat steps 5-8 infinitely
+SOURCE CODE :
+org 0h
+mov scon, #50h
+mov p0, #00h
+mov tmod, #20h
+mov th1, #-3
+setb tr1
+here:
+jnb ri, $
+mov a, sbuf
+mov p0, a
+clr ri
+sjmp here
+end
+
+1) Timer Delay program with no interrupts using Embedded C :
+AIM:
+To write an Embedded C program to generate a time delay with no interrupts. ALGORITHM:
+1. Declare the pin number of the port to be toggled
+2. Complement the value stored in the pin chosen
+3. Generate a time delay using the delay function
+4. In the delay function, set the value of TMOD to use Mode 1 of Timer 0
+5. Set the initial value for the timer in TH0 and TL0
+6. Start the timer by setting TR0 to 1
+7. Watch for rollover by checking TF0
+8. If TF0 becomes 1, stop timer by setting TR0 to 0 and reset flag TF0
+9. Repeat steps 2-8 infinitely
+SOURCE CODE :
+//Timer 0 Mode 1 with no interrupt
+#include<reg51.h>
+sbit led = P1^0;
+void delay();
+void main()
+{ unsigned int i;
+while(1)
+{ led=~led;
+for(i=0;i<1000;i++)
+delay();
+}
+}
+void delay()
+{ TMOD = 0x01;
+TH0= 0xFC;
+TL0 = 0x66;
+TR0 = 1;
+while(TF0 == 0);
+TR0 = 0;
+TF0 = 0;
+}
+
+2) Timer Delay program with interrupts using Embedded C :
+AIM:
+To write an Embedded C program to generate a time delay with interrupts. ALGORITHM:
+1. Declare the pin number of the port to be toggled
+2. Complement the value stored in the pin chosen
+3. Generate a time delay using the delay function
+4. In the delay function, set the value of TMOD to use Mode 2 of Timer 0
+5. Set the initial value for the timer in TH0 and TL0
+6. Start the timer by setting TR0 to 1
+7. Watch for rollover by checking TF0
+8. If TF0 becomes 1, stop timer by setting TR0 to 0 and reset flag TF0
+9. Repeat steps 2-8 infinitely
+SOURCE CODE :
+//Timer 0 Mode 2 with interrupt
+#include<reg51.h>
+sbit led = P1^0;
+void delay();
+void main()
+{ unsigned int i;
+while(1)
+{ led=~led;
+for(i=0;i<1000;i++)
+delay();
+}
+}
+void delay()
+{ TMOD = 0x02;
+TH0= 0xA2;
+TR0 = 1;
+while(TF0 == 0);
+TR0 = 0;
+TF0 = 0;
+}
+
+1) Serial Transmission program using Embedded C :
+AIM:
+To write an Embedded C program to perform serial transmission of data. ALGORITHM:
+1. Set the value of TMOD to use Mode 2 of Timer 1
+2. Set the Baud Rate in TH1
+3. Set the value in SCON for serial operation mode
+4. Start the timer by setting TR1 to 1
+5. Write the value ‘A’ into SBUF
+6. Watch for end of transmission using TI
+7. If TI becomes 1, reset transmission interrupt TI to 0
+8. Repeat steps 5-7 infinitely
+SOURCE CODE :
+//Serial transmission
+#include<reg51.h>
+void main()
+{ TMOD = 0x20;
+TH1 = 0xFD; // Baud rate = 9600
+SCON = 0x50;
+TR1 = 1;
+while(1)
+{ SBUF='A';
+while(TI==0);
+TI=0;
+}
+}
+
+
+2) Serial Receive program using Embedded C :
+AIM:
+To write an Embedded C program to perform serial reception of data. ALGORITHM:
+1. Set the value of TMOD to use Mode 2 of Timer 1
+2. Set the Baud Rate in TH1
+3. Set the value in SCON for serial operation mode
+4. Start the timer by setting TR1 to 1
+5. Watch for reception of serial data using RI
+6. If RI becomes 1, read value from SBUF
+7. Write the value received to port 1
+8. Reset RI to 0
+9. Repeat steps 5-8 infinitely
+SOURCE CODE :
+//Serial receive
+#include<reg51.h>
+void main()
+{ unsigned char t; // Declare here first else results error in Keil
+TMOD = 0x20;
+TH1 = 0xFD; // Baud rate = 9600
+SCON = 0x50;
+TR1 = 1;
+while(1)
+{ while(RI==0);
+t = SBUF;
+P1 = t;
+RI = 0;
+}
+}
+
+
+
+
+
+
+
